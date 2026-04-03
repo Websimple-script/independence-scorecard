@@ -184,13 +184,13 @@ body{font-family:'Inter',sans-serif;background:#fff;color:var(--text);min-height
     </div>
     <div class="results-footer">
       <span>senryx.com</span>
-      <span>jake@senryx.com</span>
+      <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="610b000a042112040f1318194f020e0c">[email&#160;protected]</a></span>
       <span>Marketing Independence for P&amp;C Agencies</span>
     </div>
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 var SHEET_URL = 'https://script.google.com/macros/s/AKfycbyFSQtdz9ZBfN-K2gdRUQBE6Xcnilu_Qa2v0f3iW-V_Tjr2IqAhA8HeWVm_Lg3p9jsQ/exec';
 
 var questions = [
@@ -326,6 +326,15 @@ function retake() {
   document.getElementById('intro').style.display = 'block';
   window.scrollTo(0, 0);
 }
+
+function sendHeight() {
+  var height = document.body.scrollHeight;
+  window.parent.postMessage({ type: 'resize', height: height }, '*');
+}
+window.addEventListener('load', sendHeight);
+var observer = new MutationObserver(sendHeight);
+observer.observe(document.body, { childList: true, subtree: true, attributes: true });
+window.addEventListener('resize', sendHeight);
 </script>
 </body>
 </html>
