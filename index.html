@@ -269,17 +269,30 @@ function showResults() {
 
   var secs = [0,0,0,0,0];
   var total = 0;
+  var pts_arr = [];
   for (var i = 0; i < answers.length; i++) {
     var pts = questions[i].options[answers[i]].pts;
     total += pts;
     secs[Math.floor(i/2)] += pts;
+    pts_arr.push(pts);
   }
 
   var tierLabel = total >= 35 ? 'Marketing Independent' : total >= 25 ? 'In Transition' : 'Vendor Dependent';
 
   // Send to Google Sheet via GET request (no CORS issues)
   var img = new Image();
-  img.src = SHEET_URL + '?firstName=' + encodeURIComponent(firstName) + '&email=' + encodeURIComponent(email) + '&score=' + total + '&tier=' + encodeURIComponent(tierLabel);
+  img.src = SHEET_URL
+    + '?firstName=' + encodeURIComponent(firstName)
+    + '&email=' + encodeURIComponent(email)
+    + '&score=' + total
+    + '&tier=' + encodeURIComponent(tierLabel)
+    + '&a1=' + pts_arr[0] + '&a2=' + pts_arr[1] + '&a3=' + pts_arr[2]
+    + '&a4=' + pts_arr[3] + '&a5=' + pts_arr[4] + '&a6=' + pts_arr[5]
+    + '&a7=' + pts_arr[6] + '&a8=' + pts_arr[7] + '&a9=' + pts_arr[8]
+    + '&a10=' + pts_arr[9]
+    + '&cat_channel=' + secs[0] + '&cat_vendor=' + secs[1]
+    + '&cat_people=' + secs[2] + '&cat_platform=' + secs[3]
+    + '&cat_system=' + secs[4];
 
   document.getElementById('email-screen').style.display = 'none';
   document.getElementById('results').style.display = 'block';
