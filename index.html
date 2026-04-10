@@ -267,13 +267,14 @@ function showResults() {
   var firstName = document.getElementById('fname').value.trim();
   var email = document.getElementById('femail').value.trim();
 
-  var secs = [0,0,0,0,0];
+  var secs = { channel: 0, vendor: 0, people: 0, platform: 0, system: 0 };
+  var catMap = ['channel','channel','channel','vendor','vendor','people','people','platform','system','system'];
   var total = 0;
   var pts_arr = [];
   for (var i = 0; i < answers.length; i++) {
     var pts = questions[i].options[answers[i]].pts;
     total += pts;
-    secs[Math.floor(i/2)] += pts;
+    secs[catMap[i]] += pts;
     pts_arr.push(pts);
   }
 
@@ -290,9 +291,9 @@ function showResults() {
     + '&a4=' + pts_arr[3] + '&a5=' + pts_arr[4] + '&a6=' + pts_arr[5]
     + '&a7=' + pts_arr[6] + '&a8=' + pts_arr[7] + '&a9=' + pts_arr[8]
     + '&a10=' + pts_arr[9]
-    + '&cat_channel=' + secs[0] + '&cat_vendor=' + secs[1]
-    + '&cat_people=' + secs[2] + '&cat_platform=' + secs[3]
-    + '&cat_system=' + secs[4];
+    + '&cat_channel=' + secs.channel + '&cat_vendor=' + secs.vendor
+    + '&cat_people=' + secs.people + '&cat_platform=' + secs.platform
+    + '&cat_system=' + secs.system;
 
   document.getElementById('email-screen').style.display = 'none';
   document.getElementById('results').style.display = 'block';
@@ -327,12 +328,21 @@ function showResults() {
   // Bars
   setTimeout(function() {
     document.getElementById('score-track-fill').style.width = (total / 40 * 100) + '%';
-    for (var i = 0; i < secs.length; i++) {
+    var catOrder = [
+      { key: 'channel', max: 12 },
+      { key: 'system',  max: 8  },
+      { key: 'platform',max: 4  },
+      { key: 'vendor',  max: 8  },
+      { key: 'people',  max: 8  }
+    ];
+    for (var i = 0; i < catOrder.length; i++) {
+      var cat = catOrder[i];
+      var score = secs[cat.key];
       var fill = document.getElementById('cb-' + i);
-      if (secs[i] <= 4) { fill.classList.add('danger'); }
-      else if (secs[i] <= 6) { fill.classList.add('warn'); }
-      fill.style.width = (secs[i] / 8 * 100) + '%';
-      document.getElementById('cs-' + i).textContent = secs[i] + '/8';
+      if (score / cat.max <= 0.5) { fill.classList.add('danger'); }
+      else if (score / cat.max <= 0.75) { fill.classList.add('warn'); }
+      fill.style.width = (score / cat.max * 100) + '%';
+      document.getElementById('cs-' + i).textContent = score + '/' + cat.max;
     }
   }, 300);
 }
